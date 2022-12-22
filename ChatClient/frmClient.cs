@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ChatClient
 {
@@ -18,22 +19,31 @@ namespace ChatClient
     {
         Socket client;
         IPEndPoint endPoint;
-        int port = 5000;
+        int port = 5161;
         IPAddress ipAddress;
+        Image icon = null;
         string path = "";
         public frmClient()
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
-
+            Connect();
         }
         private void Connect()
         {
             client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             ipAddress = IPAddress.Parse("127.0.0.1");
             endPoint = new IPEndPoint(ipAddress, port);
-
-            client.Connect(endPoint);
+            try
+            {
+                client.Connect(endPoint);
+            }
+            catch
+            {
+                MessageBox.Show("Không thể kết nối với Sever !");
+            }
             Thread thread = new Thread(ReceiveMess);
+            thread.SetApartmentState(ApartmentState.STA);
             thread.IsBackground = true;
             thread.Start();
 
@@ -42,35 +52,52 @@ namespace ChatClient
         private void btnSend_Click(object sender, EventArgs e)
         {
             SendMess();
+     
         }
         private void SendMess()
         {
-            string str =  txtMess.Text;
-            if (txtMess.Text != String.Empty && path == "")
-            {
-                client.Send(EnCode(str));
 
-                listMess.AppendText("Tôi: \n" + txtMess.Text + "\n");
-                txtMess.Text = "";
-            }
-            else if(path != "")
-            {
-                Image image = Image.FromFile(path);
-                byte[] data = new byte[1024*10000];
-                data = ImageToByteArray(image);
-                client.Send(data);
-                Clipboard.SetImage(image);
-                listMess.AppendText("Tôi: \n");
- 
-                listMess.Paste();
-                listMess.AppendText("\n");
+                string str = txtMess.Text.ToString();
+                if (txtMess.Text != String.Empty && path == "")
+                {
+                    byte[] data = new byte[1024 * 5000];
+                    data = EnCode(str);
+                    client.Send(data);
+                    listMess.AppendText("Tôi: \n" + txtMess.Text + "\n");
+                    txtMess.Text = "";
+                }
+                else if (icon != null)
+                {
+                    byte[] data = new byte[1024 * 10000];
+                    data = ImageToByteArray(icon);
+                    client.Send(data);
+                    Clipboard.SetImage(icon);
+                    listMess.AppendText("Tôi: \n");
+                    listMess.Paste();
+                    listMess.AppendText("\n");
+                icon = null;
+                    txtMess.Text = "";
+                }
+                else if (path != "")
+                {
+                    Image image = Image.FromFile(path);
+                    byte[] data = new byte[1024 * 10000];
+                    data = ImageToByteArray(image);
+                    client.Send(data);
+                    Clipboard.SetImage(image);
+                    listMess.AppendText("Tôi: \n");
+
+                    listMess.Paste();
+                    listMess.AppendText("\n");
                 path = "";
-                txtMess.Text = "";
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng nhập tin nhắn !");
-            }
+                    txtMess.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("Vui lòng nhập tkajbskjdbkjin nhắn !");
+                }
+            
+  
         }
         private void ReceiveMess()
         {
@@ -80,20 +107,33 @@ namespace ChatClient
                 {
                     byte[] data = new byte[1024 * 10000];
                     client.Receive(data);
-                    string str = DeCode(data);
-         /*           if (str != null)
+                    if (IsValidImage(data))
                     {
-                        listMess.AppendText("Sever: \n" + str);
+                        Image image = byteArrayToImage(data);
+                        Clipboard.SetImage(image);
+                        listMess.AppendText("Sever: \n");
+                        listMess.Paste();
                         listMess.AppendText("\n");
-                    }*/
+                    }
+                    else
+                    {
+                        string str = DeCode(data);
+                        if (str != null || str != String.Empty)
+                        {
+                            listMess.AppendText("Sever: \n" + str);
+                            listMess.AppendText("\n");
+                        }
+                    }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                MessageBox.Show(ex.ToString(), "Có lỗi !");
                 client.Close();
-            }   
+            }
+
         }
-        private byte[] EnCode(string str)
+        private static byte[] EnCode(string str)
         {
             return Encoding.Unicode.GetBytes(str);
         }
@@ -103,7 +143,7 @@ namespace ChatClient
         }
         private void frmClient_Load(object sender, EventArgs e)
         {
-            Connect();
+
           
         }
 
@@ -119,6 +159,57 @@ namespace ChatClient
                 txtMess.Paste();
             }
         }
+        private void btnIcon_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo dir = new DirectoryInfo(@"D:\Documents\WinForm\TongLeThang_MiniWord\TongLeThang_MiniWord\icon");
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                try
+                {
+                    this.imageList.Images.Add(file.Name, Image.FromFile(file.FullName));
+                }
+                catch
+                {
+                    Console.WriteLine("This is not an image file");
+                }
+            }
+            this.listIcon.View = View.LargeIcon;
+            this.imageList.ImageSize = new Size(32, 32);
+            this.listIcon.LargeImageList = this.imageList;
+
+            for (int j = 0; j < this.imageList.Images.Count; j++)
+            {
+                ListViewItem item = new ListViewItem();
+                item.ImageIndex = j;
+                this.listIcon.Items.Add(item);
+         
+            }
+
+            listIcon.Visible = true;
+        }
+        int pos = 0;
+        private void listIcon_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listIcon.FocusedItem == null) return;
+                pos = listIcon.SelectedIndices[0];
+                Clipboard.SetImage(imageList.Images[pos]);
+                icon = imageList.Images[pos];
+                txtMess.Paste();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            listIcon.Visible = false;
+        }
+
+        private void listView_MouseLeave(object sender, EventArgs e)
+        {
+            listIcon.Visible = false;
+        }
         public byte[] ImageToByteArray(System.Drawing.Image imageIn)
         {
             using (var ms = new MemoryStream())
@@ -126,6 +217,31 @@ namespace ChatClient
                 imageIn.Save(ms, imageIn.RawFormat);
                 return ms.ToArray();
             }
+        }
+        public Image byteArrayToImage(byte[] byteArrayIn)
+        {
+            MemoryStream ms = new MemoryStream(byteArrayIn);
+
+            Image returnImage = Image.FromStream(ms);
+            return returnImage;
+        }
+        private bool IsValidImage(byte[] bytes)
+        {
+            try
+            {
+                using (MemoryStream ms = new MemoryStream(bytes))
+                    Image.FromStream(ms);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void frmClient_FormClosed(object sender, FormClosedEventArgs e)
+        {
+   
         }
     }
 }

@@ -36,7 +36,7 @@
             this.btnImage = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.listMess = new System.Windows.Forms.ListView();
+            this.listMess = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // panelClient
@@ -107,13 +107,12 @@
             // 
             // listMess
             // 
-            this.listMess.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listMess.HideSelection = false;
+            this.listMess.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listMess.Location = new System.Drawing.Point(265, 12);
             this.listMess.Name = "listMess";
-            this.listMess.Size = new System.Drawing.Size(638, 657);
+            this.listMess.Size = new System.Drawing.Size(905, 657);
             this.listMess.TabIndex = 18;
-            this.listMess.UseCompatibleStateImageBehavior = false;
+            this.listMess.Text = "";
             // 
             // frmSever
             // 
@@ -143,7 +142,7 @@
         private System.Windows.Forms.Button btnIcon;
         private System.Windows.Forms.Button btnFile;
         private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.ListView listMess;
+        private System.Windows.Forms.RichTextBox listMess;
     }
 }
 
