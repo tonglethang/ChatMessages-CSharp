@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TongLeThang_ChatMessages", "TongLeThang_ChatMessages\TongLeThang_ChatMessages.csproj", "{6D43FC16-87DA-4844-A7EC-757C2DCE5A72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient", "ChatClient\ChatClient.csproj", "{3D7C049A-699C-49E1-803C-8DF84F525D89}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D43FC16-87DA-4844-A7EC-757C2DCE5A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D43FC16-87DA-4844-A7EC-757C2DCE5A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D43FC16-87DA-4844-A7EC-757C2DCE5A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D43FC16-87DA-4844-A7EC-757C2DCE5A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7C049A-699C-49E1-803C-8DF84F525D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7C049A-699C-49E1-803C-8DF84F525D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7C049A-699C-49E1-803C-8DF84F525D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7C049A-699C-49E1-803C-8DF84F525D89}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {160AF877-A5D2-4506-9B26-BD9146985694}
+	EndGlobalSection
+EndGlobal

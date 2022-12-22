@@ -1,0 +1,11 @@
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\bin\Debug\ChatSever.exe.config
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\bin\Debug\ChatSever.exe
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\bin\Debug\ChatSever.pdb
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\TongLeThang_ChatMessages.csproj.AssemblyReference.cache
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\TongLeThang_ChatMessages.csproj.SuggestedBindingRedirects.cache
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\TongLeThang_ChatMessages.frmSever.resources
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\ChatSever.Properties.Resources.resources
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\TongLeThang_ChatMessages.csproj.GenerateResource.cache
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\TongLeThang_ChatMessages.csproj.CoreCompileInputs.cache
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\ChatSever.exe
+D:\Documents\WinForm\TongLeThang_ChatMessages\TongLeThang_ChatMessages\obj\Debug\ChatSever.pdb
