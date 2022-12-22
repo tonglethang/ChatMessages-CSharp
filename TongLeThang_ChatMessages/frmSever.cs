@@ -14,6 +14,7 @@ using System.IO;
 using static System.Net.Mime.MediaTypeNames;
 using Image = System.Drawing.Image;
 using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
 
 namespace TongLeThang_ChatMessages
 {
@@ -25,6 +26,7 @@ namespace TongLeThang_ChatMessages
         int port = 5161;
         IPAddress ipAddress;
         string path = "";
+        Image icon;
         List<int> listPos = new List<int>();
         public frmSever()
         {
@@ -34,17 +36,24 @@ namespace TongLeThang_ChatMessages
         }
         private void btnSend_Click(object sender, EventArgs e)
         {
-            if(path != "")
+            if (txtMess.Text != String.Empty && path == "" && icon == null)
             {
-                Image image1 = Image.FromFile(path);
-                Clipboard.SetImage(image1);
-                listMess.AppendText("Tôi: \n");
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + txtMess.Text + "\n");
+            }
+            else if(icon != null)
+            {
+                Clipboard.SetImage(icon);
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + ") \n");
                 listMess.Paste();
                 listMess.AppendText("\n");
             }
-            else
+            else if(path != "")
             {
-                listMess.AppendText("Tôi: \n" + txtMess.Text + "\n");
+                Image image1 = Image.FromFile(path);
+                Clipboard.SetImage(image1);
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                listMess.Paste();
+                listMess.AppendText("\n");
             }
 
             foreach (Socket item in listClient)
@@ -53,6 +62,7 @@ namespace TongLeThang_ChatMessages
             }   
             path = "";
             txtMess.Text = "";
+            icon = null;
         }
 
  
@@ -84,7 +94,6 @@ namespace TongLeThang_ChatMessages
                         threadReceive.SetApartmentState(ApartmentState.STA);
                         threadReceive.IsBackground = true;
                         threadReceive.Start(client);
-
                     }
                     catch
                     {
@@ -93,6 +102,7 @@ namespace TongLeThang_ChatMessages
                     }
                 }
             });
+            threadListen.SetApartmentState(ApartmentState.STA);
             threadListen.IsBackground = true;
             threadListen.Start();
 
@@ -102,12 +112,19 @@ namespace TongLeThang_ChatMessages
             if (path != "")
             {
                 Image image = Image.FromFile(path);
-                byte[] data = new byte[1024 * 10000];
+                byte[] data = new byte[1024 * 5000];
                 data = ImageToByteArray(image);
                 client.Send(data);
 
             }
-            else
+            else if(icon != null)
+            {
+                byte[] data = new byte[1024 * 5000];
+                data = ImageToByteArray(icon);
+                client.Send(data);
+
+            }
+            else 
             {
                 if (txtMess.Text != String.Empty)
                 {
@@ -137,7 +154,7 @@ namespace TongLeThang_ChatMessages
                     {
                         Image image = byteArrayToImage(data);
                         Clipboard.SetImage(image);
-                        listMess.AppendText("Client " + client.LocalEndPoint + ": \n");
+                        listMess.AppendText("Client " + client.LocalEndPoint +" " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "):  \n");
                         listMess.Paste();
                         listMess.AppendText("\n");
                     }
@@ -145,7 +162,7 @@ namespace TongLeThang_ChatMessages
                     {
                         string str = DeCode(data);
                         if (str != null || str != String.Empty)
-                            listMess.AppendText("Client " + client.LocalEndPoint + ": \n" + str);
+                            listMess.AppendText("Client " + client.LocalEndPoint + " "+ "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
                         listMess.AppendText("\n");
 
                     }
@@ -186,7 +203,7 @@ namespace TongLeThang_ChatMessages
         {
             using (var ms = new MemoryStream())
             {
-                imageIn.Save(ms, imageIn.RawFormat);
+                imageIn.Save(ms, ImageFormat.Png);
                 return ms.ToArray();
             }
         }
@@ -231,6 +248,58 @@ namespace TongLeThang_ChatMessages
                 return false;
             else
                 return true;
+        }
+
+        private void btnIcon_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo dir = new DirectoryInfo(@"D:\Documents\WinForm\TongLeThang_MiniWord\TongLeThang_MiniWord\icon");
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                try
+                {
+                    this.imageList.Images.Add(file.Name, Image.FromFile(file.FullName));
+                }
+                catch
+                {
+                    Console.WriteLine("This is not an image file");
+                }
+            }
+            this.listIcon.View = View.LargeIcon;
+            this.imageList.ImageSize = new Size(32, 32);
+            this.listIcon.LargeImageList = this.imageList;
+
+            for (int j = 0; j < this.imageList.Images.Count; j++)
+            {
+                ListViewItem item = new ListViewItem();
+                item.ImageIndex = j;
+                this.listIcon.Items.Add(item);
+
+            }
+
+            listIcon.Visible = true;
+        }
+        int pos = 0;
+        private void listIcon_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listIcon.FocusedItem == null) return;
+                pos = listIcon.SelectedIndices[0];
+                Clipboard.SetImage(imageList.Images[pos]);
+                icon = imageList.Images[pos];
+                txtMess.Paste();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            listIcon.Visible = false;
+        }
+
+        private void listIcon_MouseLeave(object sender, EventArgs e)
+        {
+            listIcon.Visible = false;
         }
     }
 }

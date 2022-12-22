@@ -35,8 +35,9 @@
             this.btnIcon = new System.Windows.Forms.Button();
             this.btnImage = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.listMess = new System.Windows.Forms.RichTextBox();
+            this.listIcon = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // panelClient
@@ -75,6 +76,7 @@
             this.btnIcon.Size = new System.Drawing.Size(55, 49);
             this.btnIcon.TabIndex = 16;
             this.btnIcon.UseVisualStyleBackColor = true;
+            this.btnIcon.Click += new System.EventHandler(this.btnIcon_Click);
             // 
             // btnImage
             // 
@@ -99,11 +101,11 @@
             this.btnSend.UseVisualStyleBackColor = false;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
-            // imageList1
+            // imageList
             // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // listMess
             // 
@@ -114,12 +116,25 @@
             this.listMess.TabIndex = 18;
             this.listMess.Text = "";
             // 
+            // listIcon
+            // 
+            this.listIcon.HideSelection = false;
+            this.listIcon.Location = new System.Drawing.Point(383, 548);
+            this.listIcon.Name = "listIcon";
+            this.listIcon.Size = new System.Drawing.Size(456, 131);
+            this.listIcon.TabIndex = 19;
+            this.listIcon.UseCompatibleStateImageBehavior = false;
+            this.listIcon.Visible = false;
+            this.listIcon.SelectedIndexChanged += new System.EventHandler(this.listIcon_SelectedIndexChanged);
+            this.listIcon.MouseLeave += new System.EventHandler(this.listIcon_MouseLeave);
+            // 
             // frmSever
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 864);
+            this.Controls.Add(this.listIcon);
             this.Controls.Add(this.listMess);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.btnIcon);
@@ -141,8 +156,9 @@
         private System.Windows.Forms.Button btnImage;
         private System.Windows.Forms.Button btnIcon;
         private System.Windows.Forms.Button btnFile;
-        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.RichTextBox listMess;
+        private System.Windows.Forms.ListView listIcon;
     }
 }
 

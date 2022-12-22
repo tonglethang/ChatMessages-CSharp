@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Drawing.Imaging;
 
 namespace ChatClient
 {
@@ -21,7 +22,7 @@ namespace ChatClient
         IPEndPoint endPoint;
         int port = 5161;
         IPAddress ipAddress;
-        Image icon = null;
+        Image icon;
         string path = "";
         public frmClient()
         {
@@ -56,48 +57,43 @@ namespace ChatClient
         }
         private void SendMess()
         {
-
+            if (txtMess.Text != String.Empty && path == "" && icon == null)
+            {
                 string str = txtMess.Text.ToString();
-                if (txtMess.Text != String.Empty && path == "")
-                {
-                    byte[] data = new byte[1024 * 5000];
-                    data = EnCode(str);
-                    client.Send(data);
-                    listMess.AppendText("Tôi: \n" + txtMess.Text + "\n");
-                    txtMess.Text = "";
-                }
-                else if (icon != null)
-                {
-                    byte[] data = new byte[1024 * 10000];
-                    data = ImageToByteArray(icon);
-                    client.Send(data);
-                    Clipboard.SetImage(icon);
-                    listMess.AppendText("Tôi: \n");
-                    listMess.Paste();
-                    listMess.AppendText("\n");
-                icon = null;
-                    txtMess.Text = "";
-                }
-                else if (path != "")
-                {
-                    Image image = Image.FromFile(path);
-                    byte[] data = new byte[1024 * 10000];
-                    data = ImageToByteArray(image);
-                    client.Send(data);
-                    Clipboard.SetImage(image);
-                    listMess.AppendText("Tôi: \n");
+                byte[] data = new byte[1024 * 5000];
+                data = EnCode(str);
+                client.Send(data);
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + txtMess.Text + "\n");
+                txtMess.Text = "";
+            }
+            else if (icon != null)
+            {
+                byte[] data = new byte[1024 * 5000];
+                data = ImageToByteArray(icon);
+                client.Send(data);
 
-                    listMess.Paste();
-                    listMess.AppendText("\n");
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ ") \n");
+                listMess.Paste();
+                listMess.AppendText("\n");
+                icon = null;
+                txtMess.Text = "";
+            }
+            else if (path != "")
+            {
+                Image image = Image.FromFile(path);
+                byte[] data = new byte[1024 * 10000];
+                data = ImageToByteArray(image);
+                client.Send(data);
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
+                listMess.Paste();
+                listMess.AppendText("\n");
                 path = "";
-                    txtMess.Text = "";
-                }
-                else
-                {
-                    MessageBox.Show("Vui lòng nhập tkajbskjdbkjin nhắn !");
-                }
-            
-  
+                txtMess.Text = "";
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập tin nhắn !");
+            }
         }
         private void ReceiveMess()
         {
@@ -105,13 +101,13 @@ namespace ChatClient
             {
                 while (true)
                 {
-                    byte[] data = new byte[1024 * 10000];
+                    byte[] data = new byte[1024 * 5000];
                     client.Receive(data);
                     if (IsValidImage(data))
                     {
                         Image image = byteArrayToImage(data);
                         Clipboard.SetImage(image);
-                        listMess.AppendText("Sever: \n");
+                        listMess.AppendText("Sever "+ " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
                         listMess.Paste();
                         listMess.AppendText("\n");
                     }
@@ -120,7 +116,7 @@ namespace ChatClient
                         string str = DeCode(data);
                         if (str != null || str != String.Empty)
                         {
-                            listMess.AppendText("Sever: \n" + str);
+                            listMess.AppendText("Sever" + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
                             listMess.AppendText("\n");
                         }
                     }
@@ -128,8 +124,9 @@ namespace ChatClient
             }
             catch(Exception ex)
             {
+                Clipboard.SetText(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Có lỗi !");
-                client.Close();
+
             }
 
         }
@@ -210,11 +207,11 @@ namespace ChatClient
         {
             listIcon.Visible = false;
         }
-        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        public byte[] ImageToByteArray(Image imageIn)
         {
             using (var ms = new MemoryStream())
             {
-                imageIn.Save(ms, imageIn.RawFormat);
+                imageIn.Save(ms, ImageFormat.Png);
                 return ms.ToArray();
             }
         }
