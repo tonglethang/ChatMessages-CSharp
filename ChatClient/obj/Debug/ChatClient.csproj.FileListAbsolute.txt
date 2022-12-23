@@ -9,3 +9,7 @@ D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\obj\Debug\ChatClient.cs
 D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\obj\Debug\ChatClient.csproj.CoreCompileInputs.cache
 D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\obj\Debug\ChatClient.exe
 D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\obj\Debug\ChatClient.pdb
+D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\bin\Debug\ChatSever.exe
+D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\bin\Debug\ChatSever.pdb
+D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\bin\Debug\ChatSever.exe.config
+D:\Documents\WinForm\TongLeThang_ChatMessages\ChatClient\obj\Debug\ChatClient.csproj.CopyComplete

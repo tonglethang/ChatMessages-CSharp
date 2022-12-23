@@ -96,5 +96,11 @@
   <ItemGroup>
     <None Include="Resources\iconmess.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TongLeThang_ChatMessages\TongLeThang_ChatMessages.csproj">
+      <Project>{6d43fc16-87da-4844-a7ec-757c2dce5a72}</Project>
+      <Name>TongLeThang_ChatMessages</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

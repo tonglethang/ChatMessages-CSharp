@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelClient = new System.Windows.Forms.FlowLayoutPanel();
             this.txtMess = new System.Windows.Forms.RichTextBox();
             this.btnFile = new System.Windows.Forms.Button();
             this.btnIcon = new System.Windows.Forms.Button();
@@ -38,15 +37,11 @@
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.listMess = new System.Windows.Forms.RichTextBox();
             this.listIcon = new System.Windows.Forms.ListView();
+            this.panelClient = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.panelClient.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panelClient
-            // 
-            this.panelClient.BackColor = System.Drawing.Color.White;
-            this.panelClient.Location = new System.Drawing.Point(12, 12);
-            this.panelClient.Name = "panelClient";
-            this.panelClient.Size = new System.Drawing.Size(247, 691);
-            this.panelClient.TabIndex = 7;
             // 
             // txtMess
             // 
@@ -128,12 +123,43 @@
             this.listIcon.SelectedIndexChanged += new System.EventHandler(this.listIcon_SelectedIndexChanged);
             this.listIcon.MouseLeave += new System.EventHandler(this.listIcon_MouseLeave);
             // 
+            // panelClient
+            // 
+            this.panelClient.BackColor = System.Drawing.Color.White;
+            this.panelClient.Controls.Add(this.checkBox1);
+            this.panelClient.Location = new System.Drawing.Point(12, 69);
+            this.panelClient.Name = "panelClient";
+            this.panelClient.Size = new System.Drawing.Size(247, 634);
+            this.panelClient.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Blue;
+            this.label1.Location = new System.Drawing.Point(49, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(171, 35);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "LIST CLIENT";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(3, 3);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(95, 20);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // frmSever
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 864);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.listIcon);
             this.Controls.Add(this.listMess);
             this.Controls.Add(this.btnFile);
@@ -145,12 +171,14 @@
             this.Name = "frmSever";
             this.Text = "Sever";
             this.Load += new System.EventHandler(this.frmSever_Load);
+            this.panelClient.ResumeLayout(false);
+            this.panelClient.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.FlowLayoutPanel panelClient;
         private System.Windows.Forms.RichTextBox txtMess;
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Button btnImage;
@@ -159,6 +187,9 @@
         private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.RichTextBox listMess;
         private System.Windows.Forms.ListView listIcon;
+        private System.Windows.Forms.FlowLayoutPanel panelClient;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

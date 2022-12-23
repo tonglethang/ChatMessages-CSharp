@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Drawing.Imaging;
+using TongLeThang_ChatMessages;
 
 namespace ChatClient
 {
@@ -23,17 +24,18 @@ namespace ChatClient
         int port = 5161;
         IPAddress ipAddress;
         Image icon;
+        int ip = frmSever.ip;
         string path = "";
         public frmClient()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
-            Connect();
+
         }
         private void Connect()
         {
             client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            ipAddress = IPAddress.Parse("127.0.0.1");
+            ipAddress = IPAddress.Parse("127.0.0."+ip);
             endPoint = new IPEndPoint(ipAddress, port);
             try
             {
@@ -43,6 +45,7 @@ namespace ChatClient
             {
                 MessageBox.Show("Không thể kết nối với Sever !");
             }
+            Control.CheckForIllegalCrossThreadCalls = false;
             Thread thread = new Thread(ReceiveMess);
             thread.SetApartmentState(ApartmentState.STA);
             thread.IsBackground = true;
@@ -53,7 +56,6 @@ namespace ChatClient
         private void btnSend_Click(object sender, EventArgs e)
         {
             SendMess();
-     
         }
         private void SendMess()
         {
@@ -106,12 +108,12 @@ namespace ChatClient
                     if (IsValidImage(data))
                     {
                         Image image = byteArrayToImage(data);
-                        Clipboard.SetImage(image);
+                        Clipboard.SetDataObject(image, false, 1, 200);
                         listMess.AppendText("Sever "+ " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
                         listMess.Paste();
                         listMess.AppendText("\n");
                     }
-                    else
+                    else if(!IsValidImage(data))
                     {
                         string str = DeCode(data);
                         if (str != null || str != String.Empty)
@@ -124,9 +126,9 @@ namespace ChatClient
             }
             catch(Exception ex)
             {
-                Clipboard.SetText(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Có lỗi !");
-
+                listMess.AppendText(ex.ToString());
+                this.Close();
             }
 
         }
@@ -140,8 +142,8 @@ namespace ChatClient
         }
         private void frmClient_Load(object sender, EventArgs e)
         {
-
-          
+            Connect();
+            ip++;
         }
 
         private void btnImage_Click(object sender, EventArgs e)

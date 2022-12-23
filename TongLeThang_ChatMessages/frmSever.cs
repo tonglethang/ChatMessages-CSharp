@@ -27,13 +27,15 @@ namespace TongLeThang_ChatMessages
         IPAddress ipAddress;
         string path = "";
         Image icon;
-        List<int> listPos = new List<int>();
+        public static int ip = 1;
+
         public frmSever()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
-            Connect();
+
         }
+
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (txtMess.Text != String.Empty && path == "" && icon == null)
@@ -65,7 +67,6 @@ namespace TongLeThang_ChatMessages
             icon = null;
         }
 
- 
         private void Connect()
         {
             sever = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -73,23 +74,24 @@ namespace TongLeThang_ChatMessages
             ipAddress = IPAddress.Any;
             endPoint = new IPEndPoint(ipAddress, port);
             sever.Bind(endPoint);
-
+            sever.Listen(50);
             Console.WriteLine("Cho ket noi tu Client !");
-            int tmp = 0;
+
             Thread threadListen = new Thread(() =>
             {
                 while (true)
                 {
                     try
                     {
-                        sever.Listen(50);
+
                         Socket client = sever.Accept();
                         listClient.Add(client);
-                        if (checkSocketConnected(client))
-                        {
-                            tmp++;
-                            listPos.Add(tmp);
-                        }
+
+/*                            CheckBox checkBox = new CheckBox();
+                            checkBox.Name = listClient.Count + "";
+                            checkBox.Text = "als" + listClient.Count;
+                            this.panelClient.Controls.Add(checkBox);*/
+     
                         Thread threadReceive = new Thread(ReceiveMess);
                         threadReceive.SetApartmentState(ApartmentState.STA);
                         threadReceive.IsBackground = true;
@@ -99,45 +101,51 @@ namespace TongLeThang_ChatMessages
                     {
                         sever = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         endPoint = new IPEndPoint(ipAddress, port);
+                        sever.Bind(endPoint);
                     }
                 }
             });
             threadListen.SetApartmentState(ApartmentState.STA);
             threadListen.IsBackground = true;
             threadListen.Start();
-
+            for (int i = 0; i < listClient.Count; i++)
+            {
+                CheckBox checkBox = new CheckBox();
+                checkBox.Name = i + "";
+                checkBox.Text = "als" + i;
+                this.panelClient.Controls.Add(checkBox);
+            }
         }
         private void SendMess(Socket client)
         {
-            if (path != "")
+            if (txtMess.Text != String.Empty && icon == null && path == "")
             {
-                Image image = Image.FromFile(path);
-                byte[] data = new byte[1024 * 5000];
-                data = ImageToByteArray(image);
-                client.Send(data);
+                byte[] data = new Byte[1024 * 5000];
+                string str = txtMess.Text;
+                data = EnCode(str);
+                client.Send(EnCode(str));
 
             }
-            else if(icon != null)
+            else if(icon != null && path == "")
             {
                 byte[] data = new byte[1024 * 5000];
                 data = ImageToByteArray(icon);
                 client.Send(data);
 
+
             }
-            else 
+            else if (path != "" && icon ==null)
             {
-                if (txtMess.Text != String.Empty)
-                {
-                    byte[] data = new Byte[1024 * 5000];
-                    string str = txtMess.Text;
-                    data = EnCode(str);
-                    client.Send(EnCode(str));
-                }
-                else
-                {
-                    MessageBox.Show("Vui lòng nhập tin nhắn !");
-                }
+                Image image = Image.FromFile(path);
+                byte[] data = new byte[1024 * 5000];
+                data = ImageToByteArray(image);
+                client.Send(data);
             }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập tin nhắn !");
+            }
+            
         }
           
         private void ReceiveMess(object obj)
@@ -170,6 +178,8 @@ namespace TongLeThang_ChatMessages
             }
             catch
             {
+                client.Close();
+                listClient.Remove(client);
                 MessageBox.Show("Một Client đã ngắt kết nối !", "Thông báo !");
             }
     
@@ -185,19 +195,8 @@ namespace TongLeThang_ChatMessages
 
         private void frmSever_Load(object sender, EventArgs e)
         {
+            Connect();
 
-
-            for (int i = 0; i < 5; i++)
-            {
-                Button btnClient = new Button();
-
-                btnClient.Name = "btnClient";
-                btnClient.Size = new System.Drawing.Size(180, 81);
-                btnClient.TabIndex = 0;
-                btnClient.Text = "Client1";
-                btnClient.UseVisualStyleBackColor = true;
-                panelClient.Controls.Add(btnClient);
-            }
         }
         public byte[] ImageToByteArray(System.Drawing.Image imageIn)
         {

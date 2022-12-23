@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelClient = new System.Windows.Forms.FlowLayoutPanel();
             this.txtMess = new System.Windows.Forms.RichTextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.btnFile = new System.Windows.Forms.Button();
@@ -38,15 +37,8 @@
             this.listIcon = new System.Windows.Forms.ListView();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.listMess = new System.Windows.Forms.RichTextBox();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
-            // 
-            // panelClient
-            // 
-            this.panelClient.BackColor = System.Drawing.Color.White;
-            this.panelClient.Location = new System.Drawing.Point(12, 12);
-            this.panelClient.Name = "panelClient";
-            this.panelClient.Size = new System.Drawing.Size(247, 643);
-            this.panelClient.TabIndex = 5;
             // 
             // txtMess
             // 
@@ -73,7 +65,7 @@
             // 
             this.btnFile.BackgroundImage = global::ChatClient.Properties.Resources.iconfile;
             this.btnFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnFile.Location = new System.Drawing.Point(501, 675);
+            this.btnFile.Location = new System.Drawing.Point(188, 741);
             this.btnFile.Name = "btnFile";
             this.btnFile.Size = new System.Drawing.Size(55, 49);
             this.btnFile.TabIndex = 9;
@@ -83,7 +75,7 @@
             // 
             this.btnIcon.BackgroundImage = global::ChatClient.Properties.Resources.icon;
             this.btnIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnIcon.Location = new System.Drawing.Point(387, 675);
+            this.btnIcon.Location = new System.Drawing.Point(95, 741);
             this.btnIcon.Name = "btnIcon";
             this.btnIcon.Size = new System.Drawing.Size(55, 49);
             this.btnIcon.TabIndex = 8;
@@ -94,7 +86,7 @@
             // 
             this.btnImage.BackgroundImage = global::ChatClient.Properties.Resources.iconimage1;
             this.btnImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnImage.Location = new System.Drawing.Point(265, 675);
+            this.btnImage.Location = new System.Drawing.Point(12, 741);
             this.btnImage.Name = "btnImage";
             this.btnImage.Size = new System.Drawing.Size(67, 49);
             this.btnImage.TabIndex = 6;
@@ -104,7 +96,7 @@
             // listIcon
             // 
             this.listIcon.HideSelection = false;
-            this.listIcon.Location = new System.Drawing.Point(387, 548);
+            this.listIcon.Location = new System.Drawing.Point(95, 613);
             this.listIcon.Name = "listIcon";
             this.listIcon.Size = new System.Drawing.Size(456, 131);
             this.listIcon.TabIndex = 12;
@@ -122,11 +114,23 @@
             // listMess
             // 
             this.listMess.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listMess.Location = new System.Drawing.Point(284, 12);
+            this.listMess.Location = new System.Drawing.Point(265, 12);
             this.listMess.Name = "listMess";
-            this.listMess.Size = new System.Drawing.Size(833, 643);
+            this.listMess.Size = new System.Drawing.Size(893, 703);
             this.listMess.TabIndex = 13;
             this.listMess.Text = "";
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Alert;
+            this.checkedListBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Location = new System.Drawing.Point(12, 22);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(231, 259);
+            this.checkedListBox1.TabIndex = 14;
             // 
             // frmClient
             // 
@@ -134,13 +138,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 864);
+            this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.listIcon);
             this.Controls.Add(this.listMess);
             this.Controls.Add(this.txtMess);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.btnIcon);
             this.Controls.Add(this.btnImage);
-            this.Controls.Add(this.panelClient);
             this.Controls.Add(this.btnSend);
             this.Name = "frmClient";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -153,7 +157,6 @@
 
         #endregion
         private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.FlowLayoutPanel panelClient;
         private System.Windows.Forms.Button btnImage;
         private System.Windows.Forms.Button btnIcon;
         private System.Windows.Forms.Button btnFile;
@@ -161,6 +164,7 @@
         private System.Windows.Forms.ListView listIcon;
         private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.RichTextBox listMess;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }
 
