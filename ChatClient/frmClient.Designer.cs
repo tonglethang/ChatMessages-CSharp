@@ -146,7 +146,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(932, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(932, 30);
             this.menuStrip1.TabIndex = 22;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -304,6 +304,7 @@
             this.cbListClient.Name = "cbListClient";
             this.cbListClient.Size = new System.Drawing.Size(179, 344);
             this.cbListClient.TabIndex = 28;
+            this.cbListClient.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.cbListClient_ItemCheck);
             // 
             // frmClient
             // 

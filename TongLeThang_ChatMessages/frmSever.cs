@@ -27,6 +27,7 @@ namespace TongLeThang_ChatMessages
         IPAddress ipAddress;
         string path = "";
         Image icon;
+        string ipSendTo = "";
         public static int ip = 1;
 
         public frmSever()
@@ -96,6 +97,10 @@ namespace TongLeThang_ChatMessages
                         Socket client = sever.Accept();
                         listClient.Add(client);
                         getListClient(client.LocalEndPoint.ToString());
+                        // Get status all client send mess to sever or client
+                        getStatusAllClient(client);
+                        //
+                        //Send list client connected to all client
                         string strListClient = "";
                         foreach(Socket item in listClient)
                         {
@@ -106,6 +111,7 @@ namespace TongLeThang_ChatMessages
                             item.Send(EnCode(strListClient + ";"));
                             Console.WriteLine(strListClient + ";");
                         }
+                        //
                         Thread threadReceive = new Thread(ReceiveMess);
                         threadReceive.SetApartmentState(ApartmentState.STA);
                         threadReceive.IsBackground = true;
@@ -162,55 +168,80 @@ namespace TongLeThang_ChatMessages
                 {
                     byte[] data = new byte[1024 * 5000];
                     client.Receive(data);
+
+                    //Check Client want send messages to Sever or Client
                     string[] strCheck = DeCode(data).Split(' ');
 
-                    if (Equals(strCheck[0], "!client"))
+                    Console.WriteLine("@@@ " + strCheck[0]);
+                    if (strCheck[0].Contains("!client"))
                     {
-                        rdCheck.Checked = true;
+                        string[] addressClient = strCheck[0].Split('&');
+                        ipSendTo = addressClient[1];
+                        for(int i = 0; i < cbStatusListClient.Items.Count; i++)
+                        {
+                            if (cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()))
+                            {
+                                cbStatusListClient.SetItemCheckState(i, CheckState.Checked);
+
+                            }
+                        }
                     }
-                    else if (Equals(strCheck[0], "!sever"))
+                    else if (strCheck[0].Contains("!sever"))
                     {
-                        rdCheck.Checked = false;
+                        string[] addressClient = strCheck[0].Split('&');
+                        for (int i = 0; i < cbStatusListClient.Items.Count; i++)
+                        {
+                            if (cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()))
+                            {
+                                cbStatusListClient.SetItemCheckState(i, CheckState.Unchecked);
+
+                            }
+                        }
                     }
                     else
                     {
-                        if (rdCheck.Checked)
+                        for (int i = 0; i < cbStatusListClient.Items.Count; i++)
                         {
-                            foreach (Socket item in listClient)
+                            if (cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()) && cbStatusListClient.GetItemChecked(i) == true)
                             {
-                                if (item == client)
+                                string[] ip = ipSendTo.Split(':');
+   
+                                IPEndPoint addressClient = new IPEndPoint(IPAddress.Parse(ip[0]), 5161);
+                                foreach (Socket item in listClient)
                                 {
-                                    continue;
+                                    Console.WriteLine("###" + item.LocalEndPoint);
+                     
+                                    if (item.LocalEndPoint.ToString() == addressClient.ToString())
+                                    {
+                                        Console.WriteLine("===" + addressClient);
+                                        item.Send(data);
+                                    }
+                                }
+                            }
+                            else if(cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()) && cbStatusListClient.GetItemChecked(i) == false)
+                            {
+                                if (IsValidImage(data))
+                                {
+                                    Image image = byteArrayToImage(data);
+                                    Clipboard.SetImage(image);
+                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "):  \n");
+                                    listMess.Paste();
+                                    listMess.AppendText("\n");
                                 }
                                 else
                                 {
-                                    item.Send(data);
+                                    string str = DeCode(data);
+                                    if (str != null || str != String.Empty)
+                                        listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + str);
+                                    listMess.AppendText("\n");
                                 }
-                            }
-                        }
-                        else
-                        {
-                            if (IsValidImage(data))
-                            {
-                                Image image = byteArrayToImage(data);
-                                Clipboard.SetImage(image);
-                                listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "):  \n");
-                                listMess.Paste();
-                                listMess.AppendText("\n");
-                            }
-                            else
-                            {
-                                string str = DeCode(data);
-                                if (str != null || str != String.Empty)
-                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + str);
-                                listMess.AppendText("\n");
                             }
                         }
                     }
                     
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 client.Close();
                 string strListClient = "";
@@ -220,19 +251,20 @@ namespace TongLeThang_ChatMessages
                     {
                         listClient.Remove(listClient[i]);
                         cbListClient.Items.Remove(cbListClient.Items[i]);
+                        cbStatusListClient.Items.Remove(cbStatusListClient.Items[i]);
                     }
                 }
 
                 foreach (Socket item in listClient)
                 {
                     strListClient += item.LocalEndPoint.ToString() + "&";
+
                 }
                 foreach (Socket item in listClient)
                 {
                     item.Send(EnCode(strListClient + ";"));
-                    Console.WriteLine(strListClient + ";");
                 }
-                MessageBox.Show("Một Client đã ngắt kết nối !", "Thông báo !");
+                Console.WriteLine("Một Client đã ngắt kết nối");
             }
 
         }
@@ -366,6 +398,10 @@ namespace TongLeThang_ChatMessages
 
             this.cbListClient.Items.Add("Client " + nameClient, CheckState.Checked);
     
+        }
+        private void getStatusAllClient(Socket item)
+        {
+            cbStatusListClient.Items.Add(item.LocalEndPoint.ToString());
         }
         private void selectAll_Click(object sender, EventArgs e)
         {

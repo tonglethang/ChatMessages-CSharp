@@ -120,16 +120,11 @@ namespace ChatClient
                     }
                     else if (strCheck[0].Contains("127.0.0"))
                     {
-                        for (int i = 0; i < cbListClient.Items.Count; i++)
-                        {
-                            cbListClient.Items.RemoveAt(i);
-                        }
+                        cbListClient.Items.Clear();
                         for (int i = 0; i < strCheck.Length; i++)
                         {
-                            Console.WriteLine("@@@@@@" + strCheck[i]);
                             if (!Equals(strCheck[i], endPoint.ToString()) && strCheck[i] != String.Empty)
                             {
-                                Console.WriteLine("^^^" + strCheck[i]);
                                 cbListClient.Items.Add(strCheck[i]);
                             }
                         }
@@ -282,12 +277,28 @@ namespace ChatClient
 
         private void rdClient_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdClient.Checked)
+            try
             {
-                byte[] data = new byte[1024 * 5000];
-                string str = "!client ";
-                data = EnCode(str);
-                client.Send(data);
+                if (rdClient.Checked)
+                {
+                    byte[] data = new byte[1024 * 5000];
+                    cbListClient.SetItemCheckState(0, CheckState.Checked);
+                    for (int i = 0; i < cbListClient.Items.Count; i++)
+                    {
+                        if (cbListClient.GetItemCheckState(i) == CheckState.Checked)
+                        {
+                            string str = "!client&" + cbListClient.Items[i].ToString() + " ";
+                            data = EnCode(str);
+                            client.Send(data);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Chỉ có 1 client duy nhất ! ", "Thông báo ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                rdClient.Checked = false;
+                rdSever.Checked = true;
             }
         }
 
@@ -300,6 +311,17 @@ namespace ChatClient
                 data = EnCode(str);
                 client.Send(data);
             }
+        }
+
+        private void cbListClient_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            for (int ix = 0; ix < cbListClient.Items.Count; ++ix)
+                if (ix != e.Index) cbListClient.SetItemChecked(ix, false);
+                byte[] data = new byte[1024 * 5000];
+                string str = "!client&" + cbListClient.Items[e.Index].ToString() + " ";
+                data = EnCode(str);
+                client.Send(data);
+
         }
     }
 }

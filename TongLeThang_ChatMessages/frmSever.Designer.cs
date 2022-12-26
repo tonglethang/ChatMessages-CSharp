@@ -43,7 +43,7 @@
             this.btnIcon = new System.Windows.Forms.Button();
             this.btnImage = new System.Windows.Forms.Button();
             this.cbListClient = new System.Windows.Forms.CheckedListBox();
-            this.rdCheck = new System.Windows.Forms.RadioButton();
+            this.cbStatusListClient = new System.Windows.Forms.CheckedListBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -183,16 +183,13 @@
             this.cbListClient.Size = new System.Drawing.Size(227, 400);
             this.cbListClient.TabIndex = 22;
             // 
-            // rdCheck
+            // cbStatusListClient
             // 
-            this.rdCheck.AutoSize = true;
-            this.rdCheck.Location = new System.Drawing.Point(12, 465);
-            this.rdCheck.Name = "rdCheck";
-            this.rdCheck.Size = new System.Drawing.Size(103, 20);
-            this.rdCheck.TabIndex = 24;
-            this.rdCheck.TabStop = true;
-            this.rdCheck.Text = "radioButton1";
-            this.rdCheck.UseVisualStyleBackColor = true;
+            this.cbStatusListClient.FormattingEnabled = true;
+            this.cbStatusListClient.Location = new System.Drawing.Point(12, 321);
+            this.cbStatusListClient.Name = "cbStatusListClient";
+            this.cbStatusListClient.Size = new System.Drawing.Size(120, 89);
+            this.cbStatusListClient.TabIndex = 23;
             // 
             // frmSever
             // 
@@ -200,7 +197,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(932, 653);
-            this.Controls.Add(this.rdCheck);
+            this.Controls.Add(this.cbStatusListClient);
             this.Controls.Add(this.cbListClient);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listIcon);
@@ -235,7 +232,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuCopy;
         private System.Windows.Forms.ToolStripMenuItem menuDelete;
         private System.Windows.Forms.CheckedListBox cbListClient;
-        private System.Windows.Forms.RadioButton rdCheck;
+        private System.Windows.Forms.CheckedListBox cbStatusListClient;
     }
 }
 
