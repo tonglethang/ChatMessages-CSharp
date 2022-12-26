@@ -102,5 +102,20 @@
       <Name>TongLeThang_ChatMessages</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconclear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconclear1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconcopy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconselect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -24,8 +24,9 @@ namespace ChatClient
         int port = 5161;
         IPAddress ipAddress;
         Image icon;
-        int ip = frmSever.ip;
         string path = "";
+        static Random rnd = new Random();
+        int ip = rnd.Next(100);
         public frmClient()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -34,9 +35,11 @@ namespace ChatClient
         }
         private void Connect()
         {
+
             client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            ipAddress = IPAddress.Parse("127.0.0."+ip);
+            ipAddress = IPAddress.Parse("127.0.0." + ip.ToString());
             endPoint = new IPEndPoint(ipAddress, port);
+            this.Text = "Client (" + endPoint.ToString() + ")";
             try
             {
                 client.Connect(endPoint);
@@ -83,7 +86,7 @@ namespace ChatClient
             else if (path != "")
             {
                 Image image = Image.FromFile(path);
-                byte[] data = new byte[1024 * 10000];
+                byte[] data = new byte[1024 * 5000];
                 data = ImageToByteArray(image);
                 client.Send(data);
                 listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
@@ -105,23 +108,44 @@ namespace ChatClient
                 {
                     byte[] data = new byte[1024 * 5000];
                     client.Receive(data);
+                    string[] str1 = DeCode(data).Split(';');
+                    string[] strCheck = str1[0].Split('&');
                     if (IsValidImage(data))
                     {
                         Image image = byteArrayToImage(data);
                         Clipboard.SetDataObject(image, false, 1, 200);
-                        listMess.AppendText("Sever "+ " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
+                        listMess.AppendText("Sever "+ client.LocalEndPoint + " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
                         listMess.Paste();
                         listMess.AppendText("\n");
+                    }
+                    else if (strCheck[0].Contains("127.0.0"))
+                    {
+                        for (int i = 0; i < cbListClient.Items.Count; i++)
+                        {
+                            cbListClient.Items.RemoveAt(i);
+                        }
+                        for (int i = 0; i < strCheck.Length; i++)
+                        {
+                            Console.WriteLine("@@@@@@" + strCheck[i]);
+                            if (!Equals(strCheck[i], endPoint.ToString()) && strCheck[i] != String.Empty)
+                            {
+                                Console.WriteLine("^^^" + strCheck[i]);
+                                cbListClient.Items.Add(strCheck[i]);
+                            }
+                        }
+
+
                     }
                     else if(!IsValidImage(data))
                     {
                         string str = DeCode(data);
                         if (str != null || str != String.Empty)
                         {
-                            listMess.AppendText("Sever" + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
+                            listMess.AppendText("Sever" + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
                             listMess.AppendText("\n");
                         }
                     }
+
                 }
             }
             catch(Exception ex)
@@ -143,7 +167,7 @@ namespace ChatClient
         private void frmClient_Load(object sender, EventArgs e)
         {
             Connect();
-            ip++;
+
         }
 
         private void btnImage_Click(object sender, EventArgs e)
@@ -223,7 +247,7 @@ namespace ChatClient
 
             Image returnImage = Image.FromStream(ms);
             return returnImage;
-        }
+        }   
         private bool IsValidImage(byte[] bytes)
         {
             try
@@ -237,10 +261,45 @@ namespace ChatClient
             }
             return true;
         }
-
-        private void frmClient_FormClosed(object sender, FormClosedEventArgs e)
+        private void selectAll_Click(object sender, EventArgs e)
         {
-   
+            listMess.SelectAll();
+            listMess.SelectionBackColor = Color.Yellow;
+        }
+
+        private void menuCopy_Click(object sender, EventArgs e)
+        {
+            if (listMess.SelectionLength > 0)
+                listMess.Copy();
+        }
+
+        private void menuDelete_Click(object sender, EventArgs e)
+        {
+            if (listMess.SelectionLength > 0)
+                listMess.Cut();
+        }
+
+
+        private void rdClient_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdClient.Checked)
+            {
+                byte[] data = new byte[1024 * 5000];
+                string str = "!client ";
+                data = EnCode(str);
+                client.Send(data);
+            }
+        }
+
+        private void rdSever_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdSever.Checked)
+            {
+                byte[] data = new byte[1024 * 5000];
+                string str = "!sever ";
+                data = EnCode(str);
+                client.Send(data);
+            }
         }
     }
 }

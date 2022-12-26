@@ -30,33 +30,122 @@
         {
             this.components = new System.ComponentModel.Container();
             this.txtMess = new System.Windows.Forms.RichTextBox();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.listMess = new System.Windows.Forms.RichTextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.listIcon = new System.Windows.Forms.ListView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnSend = new System.Windows.Forms.Button();
             this.btnFile = new System.Windows.Forms.Button();
             this.btnIcon = new System.Windows.Forms.Button();
             this.btnImage = new System.Windows.Forms.Button();
-            this.btnSend = new System.Windows.Forms.Button();
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
-            this.listMess = new System.Windows.Forms.RichTextBox();
-            this.listIcon = new System.Windows.Forms.ListView();
-            this.panelClient = new System.Windows.Forms.FlowLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.panelClient.SuspendLayout();
+            this.cbListClient = new System.Windows.Forms.CheckedListBox();
+            this.rdCheck = new System.Windows.Forms.RadioButton();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtMess
             // 
             this.txtMess.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMess.Location = new System.Drawing.Point(265, 730);
+            this.txtMess.Location = new System.Drawing.Point(256, 582);
             this.txtMess.Name = "txtMess";
-            this.txtMess.Size = new System.Drawing.Size(824, 71);
+            this.txtMess.Size = new System.Drawing.Size(598, 59);
             this.txtMess.TabIndex = 13;
             this.txtMess.Text = "";
+            // 
+            // imageList
+            // 
+            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // listMess
+            // 
+            this.listMess.ContextMenuStrip = this.contextMenuStrip1;
+            this.listMess.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listMess.Location = new System.Drawing.Point(258, 12);
+            this.listMess.Name = "listMess";
+            this.listMess.Size = new System.Drawing.Size(658, 564);
+            this.listMess.TabIndex = 18;
+            this.listMess.Text = "";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSelect,
+            this.menuCopy,
+            this.menuDelete});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(158, 82);
+            // 
+            // menuSelect
+            // 
+            this.menuSelect.Image = global::ChatSever.Properties.Resources.iconselect;
+            this.menuSelect.Name = "menuSelect";
+            this.menuSelect.Size = new System.Drawing.Size(157, 26);
+            this.menuSelect.Text = "Chọn tất cả";
+            this.menuSelect.Click += new System.EventHandler(this.selectAll_Click);
+            // 
+            // menuCopy
+            // 
+            this.menuCopy.Image = global::ChatSever.Properties.Resources.iconcopy;
+            this.menuCopy.Name = "menuCopy";
+            this.menuCopy.Size = new System.Drawing.Size(157, 26);
+            this.menuCopy.Text = "Sao chép";
+            this.menuCopy.Click += new System.EventHandler(this.menuCopy_Click);
+            // 
+            // menuDelete
+            // 
+            this.menuDelete.Image = global::ChatSever.Properties.Resources.iconclear;
+            this.menuDelete.Name = "menuDelete";
+            this.menuDelete.Size = new System.Drawing.Size(157, 26);
+            this.menuDelete.Text = "Xóa";
+            this.menuDelete.Click += new System.EventHandler(this.menuDelete_Click);
+            // 
+            // listIcon
+            // 
+            this.listIcon.HideSelection = false;
+            this.listIcon.Location = new System.Drawing.Point(120, 459);
+            this.listIcon.Name = "listIcon";
+            this.listIcon.Size = new System.Drawing.Size(456, 131);
+            this.listIcon.TabIndex = 19;
+            this.listIcon.UseCompatibleStateImageBehavior = false;
+            this.listIcon.Visible = false;
+            this.listIcon.SelectedIndexChanged += new System.EventHandler(this.listIcon_SelectedIndexChanged);
+            this.listIcon.MouseLeave += new System.EventHandler(this.listIcon_MouseLeave);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Blue;
+            this.label1.Location = new System.Drawing.Point(42, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(171, 35);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "LIST CLIENT";
+            // 
+            // btnSend
+            // 
+            this.btnSend.BackColor = System.Drawing.Color.LightGray;
+            this.btnSend.BackgroundImage = global::ChatSever.Properties.Resources.iconmess;
+            this.btnSend.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSend.Location = new System.Drawing.Point(860, 582);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(60, 59);
+            this.btnSend.TabIndex = 14;
+            this.btnSend.UseVisualStyleBackColor = false;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // btnFile
             // 
             this.btnFile.BackgroundImage = global::ChatSever.Properties.Resources.iconfile;
             this.btnFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnFile.Location = new System.Drawing.Point(486, 675);
+            this.btnFile.Location = new System.Drawing.Point(195, 587);
             this.btnFile.Name = "btnFile";
             this.btnFile.Size = new System.Drawing.Size(55, 49);
             this.btnFile.TabIndex = 17;
@@ -66,7 +155,7 @@
             // 
             this.btnIcon.BackgroundImage = global::ChatSever.Properties.Resources.icon;
             this.btnIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnIcon.Location = new System.Drawing.Point(383, 675);
+            this.btnIcon.Location = new System.Drawing.Point(120, 587);
             this.btnIcon.Name = "btnIcon";
             this.btnIcon.Size = new System.Drawing.Size(55, 49);
             this.btnIcon.TabIndex = 16;
@@ -77,88 +166,42 @@
             // 
             this.btnImage.BackgroundImage = global::ChatSever.Properties.Resources.iconimage;
             this.btnImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnImage.Location = new System.Drawing.Point(265, 675);
+            this.btnImage.Location = new System.Drawing.Point(29, 587);
             this.btnImage.Name = "btnImage";
             this.btnImage.Size = new System.Drawing.Size(67, 49);
             this.btnImage.TabIndex = 15;
             this.btnImage.UseVisualStyleBackColor = true;
             this.btnImage.Click += new System.EventHandler(this.btnImage_Click);
             // 
-            // btnSend
+            // cbListClient
             // 
-            this.btnSend.BackColor = System.Drawing.Color.LightGray;
-            this.btnSend.BackgroundImage = global::ChatSever.Properties.Resources.iconmess;
-            this.btnSend.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSend.Location = new System.Drawing.Point(1095, 730);
-            this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 71);
-            this.btnSend.TabIndex = 14;
-            this.btnSend.UseVisualStyleBackColor = false;
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+            this.cbListClient.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbListClient.FormattingEnabled = true;
+            this.cbListClient.Location = new System.Drawing.Point(12, 59);
+            this.cbListClient.Name = "cbListClient";
+            this.cbListClient.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cbListClient.Size = new System.Drawing.Size(227, 400);
+            this.cbListClient.TabIndex = 22;
             // 
-            // imageList
+            // rdCheck
             // 
-            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // listMess
-            // 
-            this.listMess.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listMess.Location = new System.Drawing.Point(265, 12);
-            this.listMess.Name = "listMess";
-            this.listMess.Size = new System.Drawing.Size(905, 657);
-            this.listMess.TabIndex = 18;
-            this.listMess.Text = "";
-            // 
-            // listIcon
-            // 
-            this.listIcon.HideSelection = false;
-            this.listIcon.Location = new System.Drawing.Point(383, 548);
-            this.listIcon.Name = "listIcon";
-            this.listIcon.Size = new System.Drawing.Size(456, 131);
-            this.listIcon.TabIndex = 19;
-            this.listIcon.UseCompatibleStateImageBehavior = false;
-            this.listIcon.Visible = false;
-            this.listIcon.SelectedIndexChanged += new System.EventHandler(this.listIcon_SelectedIndexChanged);
-            this.listIcon.MouseLeave += new System.EventHandler(this.listIcon_MouseLeave);
-            // 
-            // panelClient
-            // 
-            this.panelClient.BackColor = System.Drawing.Color.White;
-            this.panelClient.Controls.Add(this.checkBox1);
-            this.panelClient.Location = new System.Drawing.Point(12, 69);
-            this.panelClient.Name = "panelClient";
-            this.panelClient.Size = new System.Drawing.Size(247, 634);
-            this.panelClient.TabIndex = 7;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(49, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(171, 35);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "LIST CLIENT";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(3, 3);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(95, 20);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.rdCheck.AutoSize = true;
+            this.rdCheck.Location = new System.Drawing.Point(12, 465);
+            this.rdCheck.Name = "rdCheck";
+            this.rdCheck.Size = new System.Drawing.Size(103, 20);
+            this.rdCheck.TabIndex = 24;
+            this.rdCheck.TabStop = true;
+            this.rdCheck.Text = "radioButton1";
+            this.rdCheck.UseVisualStyleBackColor = true;
             // 
             // frmSever
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1182, 864);
+            this.ClientSize = new System.Drawing.Size(932, 653);
+            this.Controls.Add(this.rdCheck);
+            this.Controls.Add(this.cbListClient);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listIcon);
             this.Controls.Add(this.listMess);
@@ -167,12 +210,11 @@
             this.Controls.Add(this.btnImage);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtMess);
-            this.Controls.Add(this.panelClient);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmSever";
             this.Text = "Sever";
             this.Load += new System.EventHandler(this.frmSever_Load);
-            this.panelClient.ResumeLayout(false);
-            this.panelClient.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,9 +229,13 @@
         private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.RichTextBox listMess;
         private System.Windows.Forms.ListView listIcon;
-        private System.Windows.Forms.FlowLayoutPanel panelClient;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem menuSelect;
+        private System.Windows.Forms.ToolStripMenuItem menuCopy;
+        private System.Windows.Forms.ToolStripMenuItem menuDelete;
+        private System.Windows.Forms.CheckedListBox cbListClient;
+        private System.Windows.Forms.RadioButton rdCheck;
     }
 }
 

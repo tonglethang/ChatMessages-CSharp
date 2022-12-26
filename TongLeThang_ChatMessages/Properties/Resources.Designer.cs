@@ -73,6 +73,26 @@ namespace ChatSever.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap iconclear {
+            get {
+                object obj = ResourceManager.GetObject("iconclear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconcopy {
+            get {
+                object obj = ResourceManager.GetObject("iconcopy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap iconfile {
             get {
                 object obj = ResourceManager.GetObject("iconfile", resourceCulture);
@@ -96,6 +116,16 @@ namespace ChatSever.Properties {
         internal static System.Drawing.Bitmap iconmess {
             get {
                 object obj = ResourceManager.GetObject("iconmess", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconselect {
+            get {
+                object obj = ResourceManager.GetObject("iconselect", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

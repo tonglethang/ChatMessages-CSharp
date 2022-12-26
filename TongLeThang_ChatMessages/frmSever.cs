@@ -42,14 +42,14 @@ namespace TongLeThang_ChatMessages
             {
                 listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + txtMess.Text + "\n");
             }
-            else if(icon != null)
+            else if (icon != null)
             {
                 Clipboard.SetImage(icon);
                 listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + ") \n");
                 listMess.Paste();
                 listMess.AppendText("\n");
             }
-            else if(path != "")
+            else if (path != "")
             {
                 Image image1 = Image.FromFile(path);
                 Clipboard.SetImage(image1);
@@ -58,10 +58,20 @@ namespace TongLeThang_ChatMessages
                 listMess.AppendText("\n");
             }
 
-            foreach (Socket item in listClient)
+            try
             {
-                SendMess(item);
-            }   
+                for(int i = 0; i < cbListClient.Items.Count; i++)
+                {
+                    if(cbListClient.GetItemCheckState(i) == CheckState.Checked)
+                    {
+                        SendMess(listClient[i]);
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("hệ thống lỗi !", "Thông báo !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             path = "";
             txtMess.Text = "";
             icon = null;
@@ -83,15 +93,19 @@ namespace TongLeThang_ChatMessages
                 {
                     try
                     {
-
                         Socket client = sever.Accept();
                         listClient.Add(client);
-
-/*                            CheckBox checkBox = new CheckBox();
-                            checkBox.Name = listClient.Count + "";
-                            checkBox.Text = "als" + listClient.Count;
-                            this.panelClient.Controls.Add(checkBox);*/
-     
+                        getListClient(client.LocalEndPoint.ToString());
+                        string strListClient = "";
+                        foreach(Socket item in listClient)
+                        {
+                            strListClient += item.LocalEndPoint.ToString() + "&";
+                        }
+                        foreach (Socket item in listClient)
+                        {
+                            item.Send(EnCode(strListClient + ";"));
+                            Console.WriteLine(strListClient + ";");
+                        }
                         Thread threadReceive = new Thread(ReceiveMess);
                         threadReceive.SetApartmentState(ApartmentState.STA);
                         threadReceive.IsBackground = true;
@@ -101,20 +115,13 @@ namespace TongLeThang_ChatMessages
                     {
                         sever = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         endPoint = new IPEndPoint(ipAddress, port);
-                        sever.Bind(endPoint);
                     }
                 }
             });
             threadListen.SetApartmentState(ApartmentState.STA);
             threadListen.IsBackground = true;
             threadListen.Start();
-            for (int i = 0; i < listClient.Count; i++)
-            {
-                CheckBox checkBox = new CheckBox();
-                checkBox.Name = i + "";
-                checkBox.Text = "als" + i;
-                this.panelClient.Controls.Add(checkBox);
-            }
+
         }
         private void SendMess(Socket client)
         {
@@ -126,15 +133,13 @@ namespace TongLeThang_ChatMessages
                 client.Send(EnCode(str));
 
             }
-            else if(icon != null && path == "")
+            else if (icon != null && path == "")
             {
                 byte[] data = new byte[1024 * 5000];
                 data = ImageToByteArray(icon);
                 client.Send(data);
-
-
             }
-            else if (path != "" && icon ==null)
+            else if (path != "" && icon == null)
             {
                 Image image = Image.FromFile(path);
                 byte[] data = new byte[1024 * 5000];
@@ -145,9 +150,9 @@ namespace TongLeThang_ChatMessages
             {
                 MessageBox.Show("Vui lòng nhập tin nhắn !");
             }
-            
+
         }
-          
+
         private void ReceiveMess(object obj)
         {
             Socket client = obj as Socket;
@@ -157,32 +162,79 @@ namespace TongLeThang_ChatMessages
                 {
                     byte[] data = new byte[1024 * 5000];
                     client.Receive(data);
+                    string[] strCheck = DeCode(data).Split(' ');
 
-                    if (IsValidImage(data))
+                    if (Equals(strCheck[0], "!client"))
                     {
-                        Image image = byteArrayToImage(data);
-                        Clipboard.SetImage(image);
-                        listMess.AppendText("Client " + client.LocalEndPoint +" " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "):  \n");
-                        listMess.Paste();
-                        listMess.AppendText("\n");
+                        rdCheck.Checked = true;
+                    }
+                    else if (Equals(strCheck[0], "!sever"))
+                    {
+                        rdCheck.Checked = false;
                     }
                     else
                     {
-                        string str = DeCode(data);
-                        if (str != null || str != String.Empty)
-                            listMess.AppendText("Client " + client.LocalEndPoint + " "+ "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
-                        listMess.AppendText("\n");
-
+                        if (rdCheck.Checked)
+                        {
+                            foreach (Socket item in listClient)
+                            {
+                                if (item == client)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    item.Send(data);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (IsValidImage(data))
+                            {
+                                Image image = byteArrayToImage(data);
+                                Clipboard.SetImage(image);
+                                listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "):  \n");
+                                listMess.Paste();
+                                listMess.AppendText("\n");
+                            }
+                            else
+                            {
+                                string str = DeCode(data);
+                                if (str != null || str != String.Empty)
+                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + str);
+                                listMess.AppendText("\n");
+                            }
+                        }
                     }
+                    
                 }
             }
             catch
             {
                 client.Close();
-                listClient.Remove(client);
+                string strListClient = "";
+                for(int i = 0; i < listClient.Count; i++)
+                {
+                    if(client == listClient[i])
+                    {
+                        listClient.Remove(listClient[i]);
+                        cbListClient.Items.Remove(cbListClient.Items[i]);
+                    }
+                }
+
+                foreach (Socket item in listClient)
+                {
+                    strListClient += item.LocalEndPoint.ToString() + "&";
+                }
+                foreach (Socket item in listClient)
+                {
+                    item.Send(EnCode(strListClient + ";"));
+                    Console.WriteLine(strListClient + ";");
+                }
                 MessageBox.Show("Một Client đã ngắt kết nối !", "Thông báo !");
             }
-    
+
         }
         private string DeCode(byte[] data)
         {
@@ -299,6 +351,38 @@ namespace TongLeThang_ChatMessages
         private void listIcon_MouseLeave(object sender, EventArgs e)
         {
             listIcon.Visible = false;
+        }
+
+        private void getListClient(string nameClient)
+        {
+/*            for (int i = 0; i < cbListClient.Items.Count; i++)
+            {
+                this.cbListClient.Items.Remove(cbListClient.Items[i]);
+            }
+            for (int i = 1; i <= listClient.Count; i++)
+            {
+                this.cbListClient.Items.Add("Client " + nameClient);
+            }*/
+
+            this.cbListClient.Items.Add("Client " + nameClient, CheckState.Checked);
+    
+        }
+        private void selectAll_Click(object sender, EventArgs e)
+        {
+            listMess.SelectAll();
+            listMess.SelectionBackColor = Color.Yellow;
+        }
+
+        private void menuCopy_Click(object sender, EventArgs e)
+        {
+            if (listMess.SelectionLength > 0)
+                listMess.Copy();
+        }
+
+        private void menuDelete_Click(object sender, EventArgs e)
+        {
+            if (listMess.SelectionLength > 0)
+                listMess.Cut();
         }
     }
 }
