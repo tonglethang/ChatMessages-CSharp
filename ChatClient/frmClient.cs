@@ -110,17 +110,28 @@ namespace ChatClient
                     client.Receive(data);
                     string[] str1 = DeCode(data).Split(';');
                     string[] strCheck = str1[0].Split('&');
+                    string name = "";
+
                     if (IsValidImage(data))
                     {
                         Image image = byteArrayToImage(data);
                         Clipboard.SetDataObject(image, false, 1, 200);
-                        listMess.AppendText("Sever "+ client.LocalEndPoint + " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
+                        listMess.AppendText(name + " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
                         listMess.Paste();
                         listMess.AppendText("\n");
                     }
+                    //set name client send message 
+
+                    //
                     else if (strCheck[0].Contains("127.0.0"))
                     {
+                        int pos = -1;
+                        if(cbListClient.Items.Count > 0 && getIndexItemChecked(cbListClient) != -1 && getIndexItemChecked(cbListClient) < strCheck.Length)
+                        {
+                            pos = getIndexItemChecked(cbListClient);
+                        }
                         cbListClient.Items.Clear();
+
                         for (int i = 0; i < strCheck.Length; i++)
                         {
                             if (!Equals(strCheck[i], endPoint.ToString()) && strCheck[i] != String.Empty)
@@ -128,15 +139,28 @@ namespace ChatClient
                                 cbListClient.Items.Add(strCheck[i]);
                             }
                         }
-
-
+                        if (cbListClient.Items.Count == 0)
+                        {
+                            rdSever.Checked = true;
+                        }
+                        try
+                        {
+                            if (cbListClient.Items.Count > 0 && pos >= 0)
+                            {
+                                cbListClient.SetItemChecked(pos, true);
+                            }
+                        }
+                        catch
+                        {
+                            cbListClient.SetItemChecked(pos -1 , true);
+                        }
                     }
                     else if(!IsValidImage(data))
                     {
                         string str = DeCode(data);
                         if (str != null || str != String.Empty)
                         {
-                            listMess.AppendText("Sever" + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
+                            listMess.AppendText(name + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
                             listMess.AppendText("\n");
                         }
                     }
@@ -281,6 +305,8 @@ namespace ChatClient
             {
                 if (rdClient.Checked)
                 {
+                    lblListClient.Visible = true;
+                    cbListClient.Visible = true;
                     byte[] data = new byte[1024 * 5000];
                     cbListClient.SetItemCheckState(0, CheckState.Checked);
                     for (int i = 0; i < cbListClient.Items.Count; i++)
@@ -306,6 +332,10 @@ namespace ChatClient
         {
             if (rdSever.Checked)
             {
+                lblListClient.Visible = false;
+                cbListClient.Visible = false;
+                for (int ix = 0; ix < cbListClient.Items.Count; ++ix)
+                    cbListClient.SetItemChecked(ix, false);
                 byte[] data = new byte[1024 * 5000];
                 string str = "!sever ";
                 data = EnCode(str);
@@ -321,7 +351,28 @@ namespace ChatClient
                 string str = "!client&" + cbListClient.Items[e.Index].ToString() + " ";
                 data = EnCode(str);
                 client.Send(data);
-
+               
+        }
+        private int getIndexItemChecked(CheckedListBox clb)
+        {
+            int i = 0;
+            bool check = false;
+            for(i = 0;i < clb.Items.Count; i++)
+            {
+                if (clb.GetItemChecked(i))
+                {
+                    check = true;
+                    break;
+                }
+            }
+            if (check)
+            {
+                return i;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

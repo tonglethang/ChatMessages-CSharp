@@ -44,7 +44,7 @@
             this.radioClient = new System.Windows.Forms.RadioButton();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblListClient = new System.Windows.Forms.Label();
             this.btnSend = new System.Windows.Forms.Button();
             this.btnFile = new System.Windows.Forms.Button();
             this.btnIcon = new System.Windows.Forms.Button();
@@ -204,16 +204,17 @@
             this.checkBox1.Text = "Client 1";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // lblListClient
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.Blue;
-            this.label2.Location = new System.Drawing.Point(47, 180);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 35);
-            this.label2.TabIndex = 26;
-            this.label2.Text = "List Client";
+            this.lblListClient.AutoSize = true;
+            this.lblListClient.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblListClient.ForeColor = System.Drawing.Color.Blue;
+            this.lblListClient.Location = new System.Drawing.Point(47, 180);
+            this.lblListClient.Name = "lblListClient";
+            this.lblListClient.Size = new System.Drawing.Size(144, 35);
+            this.lblListClient.TabIndex = 26;
+            this.lblListClient.Text = "List Client";
+            this.lblListClient.Visible = false;
             // 
             // btnSend
             // 
@@ -304,6 +305,7 @@
             this.cbListClient.Name = "cbListClient";
             this.cbListClient.Size = new System.Drawing.Size(179, 344);
             this.cbListClient.TabIndex = 28;
+            this.cbListClient.Visible = false;
             this.cbListClient.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.cbListClient_ItemCheck);
             // 
             // frmClient
@@ -315,7 +317,7 @@
             this.Controls.Add(this.listIcon);
             this.Controls.Add(this.cbListClient);
             this.Controls.Add(this.flowOption);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblListClient);
             this.Controls.Add(this.panelOption);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.label1);
@@ -328,6 +330,7 @@
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "frmClient";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Client";
@@ -363,7 +366,7 @@
         private System.Windows.Forms.RadioButton radioClient;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblListClient;
         private System.Windows.Forms.FlowLayoutPanel flowOption;
         private System.Windows.Forms.RadioButton rdSever;
         private System.Windows.Forms.RadioButton rdClient;

@@ -27,7 +27,7 @@ namespace TongLeThang_ChatMessages
         IPAddress ipAddress;
         string path = "";
         Image icon;
-        string ipSendTo = "";
+
         public static int ip = 1;
 
         public frmSever()
@@ -162,6 +162,7 @@ namespace TongLeThang_ChatMessages
         private void ReceiveMess(object obj)
         {
             Socket client = obj as Socket;
+            string ipSendTo = "";
             try
             {
                 while (true)
@@ -188,18 +189,17 @@ namespace TongLeThang_ChatMessages
                     }
                     else if (strCheck[0].Contains("!sever"))
                     {
-                        string[] addressClient = strCheck[0].Split('&');
                         for (int i = 0; i < cbStatusListClient.Items.Count; i++)
                         {
                             if (cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()))
                             {
                                 cbStatusListClient.SetItemCheckState(i, CheckState.Unchecked);
-
                             }
                         }
                     }
                     else
                     {
+                        bool check = true;
                         for (int i = 0; i < cbStatusListClient.Items.Count; i++)
                         {
                             if (cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()) && cbStatusListClient.GetItemChecked(i) == true)
@@ -213,35 +213,36 @@ namespace TongLeThang_ChatMessages
                      
                                     if (item.LocalEndPoint.ToString() == addressClient.ToString())
                                     {
-                                        Console.WriteLine("===" + addressClient);
+                                        check = false;
+                                        item.Send(EnCode("!NameClient&" + item.LocalEndPoint + ";"));
                                         item.Send(data);
                                     }
                                 }
                             }
-                            else if(cbStatusListClient.Items[i].ToString().Equals(client.LocalEndPoint.ToString()) && cbStatusListClient.GetItemChecked(i) == false)
+                        }
+                        if (check)
+                        {
+                            if (IsValidImage(data))
                             {
-                                if (IsValidImage(data))
-                                {
-                                    Image image = byteArrayToImage(data);
-                                    Clipboard.SetImage(image);
-                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "):  \n");
-                                    listMess.Paste();
-                                    listMess.AppendText("\n");
-                                }
-                                else
-                                {
-                                    string str = DeCode(data);
-                                    if (str != null || str != String.Empty)
-                                        listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + str);
-                                    listMess.AppendText("\n");
-                                }
+                                Image image = byteArrayToImage(data);
+                                Clipboard.SetImage(image);
+                                listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "):  \n");
+                                listMess.Paste();
+                                listMess.AppendText("\n");
+                            }
+                            else
+                            {
+                                string str = DeCode(data);
+                                if (str != null || str != String.Empty)
+                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + str);
+                                listMess.AppendText("\n");
                             }
                         }
                     }
                     
                 }
             }
-            catch(Exception ex)
+            catch
             {
                 client.Close();
                 string strListClient = "";
@@ -387,15 +388,6 @@ namespace TongLeThang_ChatMessages
 
         private void getListClient(string nameClient)
         {
-/*            for (int i = 0; i < cbListClient.Items.Count; i++)
-            {
-                this.cbListClient.Items.Remove(cbListClient.Items[i]);
-            }
-            for (int i = 1; i <= listClient.Count; i++)
-            {
-                this.cbListClient.Items.Add("Client " + nameClient);
-            }*/
-
             this.cbListClient.Items.Add("Client " + nameClient, CheckState.Checked);
     
         }

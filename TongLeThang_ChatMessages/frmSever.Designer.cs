@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.txtMess = new System.Windows.Forms.RichTextBox();
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.imageList = new System.Windows.Forms.ImageList();
             this.listMess = new System.Windows.Forms.RichTextBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
             this.menuSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.menuDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +51,7 @@
             this.txtMess.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMess.Location = new System.Drawing.Point(256, 582);
             this.txtMess.Name = "txtMess";
-            this.txtMess.Size = new System.Drawing.Size(598, 59);
+            this.txtMess.Size = new System.Drawing.Size(522, 59);
             this.txtMess.TabIndex = 13;
             this.txtMess.Text = "";
             // 
@@ -68,7 +67,7 @@
             this.listMess.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listMess.Location = new System.Drawing.Point(258, 12);
             this.listMess.Name = "listMess";
-            this.listMess.Size = new System.Drawing.Size(658, 564);
+            this.listMess.Size = new System.Drawing.Size(586, 564);
             this.listMess.TabIndex = 18;
             this.listMess.Text = "";
             // 
@@ -134,7 +133,7 @@
             this.btnSend.BackColor = System.Drawing.Color.LightGray;
             this.btnSend.BackgroundImage = global::ChatSever.Properties.Resources.iconmess;
             this.btnSend.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSend.Location = new System.Drawing.Point(860, 582);
+            this.btnSend.Location = new System.Drawing.Point(784, 582);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(60, 59);
             this.btnSend.TabIndex = 14;
@@ -190,13 +189,14 @@
             this.cbStatusListClient.Name = "cbStatusListClient";
             this.cbStatusListClient.Size = new System.Drawing.Size(120, 89);
             this.cbStatusListClient.TabIndex = 23;
+            this.cbStatusListClient.Visible = false;
             // 
             // frmSever
             // 
             this.AcceptButton = this.btnSend;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(932, 653);
+            this.ClientSize = new System.Drawing.Size(857, 653);
             this.Controls.Add(this.cbStatusListClient);
             this.Controls.Add(this.cbListClient);
             this.Controls.Add(this.label1);
@@ -208,6 +208,7 @@
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtMess);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "frmSever";
             this.Text = "Sever";
             this.Load += new System.EventHandler(this.frmSever_Load);
