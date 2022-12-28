@@ -41,24 +41,44 @@ namespace TongLeThang_ChatMessages
         {
             if (txtMess.Text != String.Empty && path == "" && icon == null)
             {
-                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + txtMess.Text + "\n");
+                listMess.SelectionAlignment = HorizontalAlignment.Right;
+                listMess.ReadOnly = false;
+                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
+                listMess.AppendText(txtMess.Text + "\n");
+                listMess.ReadOnly = true;
             }
             else if (icon != null)
             {
+                listMess.SelectionAlignment = HorizontalAlignment.Right;
+                listMess.ReadOnly = false;
                 Clipboard.SetImage(icon);
-                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + ") \n");
+                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
+                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
                 listMess.Paste();
                 listMess.AppendText("\n");
+                listMess.ReadOnly = true;
             }
             else if (path != "")
             {
+                listMess.SelectionAlignment = HorizontalAlignment.Right;
+                listMess.ReadOnly = false;
                 Image image1 = Image.FromFile(path);
                 Clipboard.SetImage(image1);
+                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
                 listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
                 listMess.Paste();
                 listMess.AppendText("\n");
+                listMess.ReadOnly = true;
             }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập tin nhắn !");
 
+            }
             try
             {
                 for(int i = 0; i < cbListClient.Items.Count; i++)
@@ -71,7 +91,7 @@ namespace TongLeThang_ChatMessages
             }
             catch
             {
-                MessageBox.Show("hệ thống lỗi !", "Thông báo !", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Hệ thống lỗi !", "Thông báo !", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             path = "";
             txtMess.Text = "";
@@ -133,7 +153,7 @@ namespace TongLeThang_ChatMessages
         {
             if (txtMess.Text != String.Empty && icon == null && path == "")
             {
-                byte[] data = new Byte[1024 * 5000];
+                byte[] data = new byte[1024 * 5000];
                 string str = txtMess.Text;
                 data = EnCode(str);
                 client.Send(EnCode(str));
@@ -152,10 +172,7 @@ namespace TongLeThang_ChatMessages
                 data = ImageToByteArray(image);
                 client.Send(data);
             }
-            else
-            {
-                MessageBox.Show("Vui lòng nhập tin nhắn !");
-            }
+
 
         }
 
@@ -173,7 +190,6 @@ namespace TongLeThang_ChatMessages
                     //Check Client want send messages to Sever or Client
                     string[] strCheck = DeCode(data).Split(' ');
 
-                    Console.WriteLine("@@@ " + strCheck[0]);
                     if (strCheck[0].Contains("!client"))
                     {
                         string[] addressClient = strCheck[0].Split('&');
@@ -208,13 +224,11 @@ namespace TongLeThang_ChatMessages
    
                                 IPEndPoint addressClient = new IPEndPoint(IPAddress.Parse(ip[0]), 5161);
                                 foreach (Socket item in listClient)
-                                {
-                                    Console.WriteLine("###" + item.LocalEndPoint);
-                     
+                                {               
                                     if (item.LocalEndPoint.ToString() == addressClient.ToString())
                                     {
                                         check = false;
-                                        item.Send(EnCode("!NameClient&" + item.LocalEndPoint + ";"));
+                                        item.Send(EnCode("!NameClient&" + client.LocalEndPoint + ";"));
                                         item.Send(data);
                                     }
                                 }
@@ -224,22 +238,33 @@ namespace TongLeThang_ChatMessages
                         {
                             if (IsValidImage(data))
                             {
+                                listMess.SelectionAlignment = HorizontalAlignment.Left;
+                                listMess.ReadOnly = false;
                                 Image image = byteArrayToImage(data);
                                 Clipboard.SetImage(image);
+                                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
                                 listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "):  \n");
+                                listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
                                 listMess.Paste();
                                 listMess.AppendText("\n");
+                                listMess.ReadOnly = true;
                             }
                             else
                             {
+                                listMess.SelectionAlignment = HorizontalAlignment.Left;
+                                listMess.ReadOnly = false;
+                                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
                                 string str = DeCode(data);
                                 if (str != null || str != String.Empty)
-                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n" + str);
+
+                                    listMess.AppendText("Client " + client.LocalEndPoint + " " + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                                    listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
+                                    listMess.AppendText(str);
                                 listMess.AppendText("\n");
+                                listMess.ReadOnly = true;
                             }
                         }
-                    }
-                    
+                    }                   
                 }
             }
             catch
@@ -334,19 +359,22 @@ namespace TongLeThang_ChatMessages
                 return true;
         }
 
+        private static String getPathIcon()
+        {
+            string pathIcon = Environment.CurrentDirectory.ToString(); 
+            var url = Directory.GetParent(Directory.GetParent(pathIcon).ToString()); 
+
+            return url.ToString();
+
+        }
         private void btnIcon_Click(object sender, EventArgs e)
         {
-            DirectoryInfo dir = new DirectoryInfo(@"D:\Documents\WinForm\TongLeThang_MiniWord\TongLeThang_MiniWord\icon");
-            foreach (FileInfo file in dir.GetFiles())
+            string filePath = getPathIcon() + @"\Icons";
+            string[] files = Directory.GetFiles(filePath);
+            foreach (String f in files)
             {
-                try
-                {
-                    this.imageList.Images.Add(file.Name, Image.FromFile(file.FullName));
-                }
-                catch
-                {
-                    Console.WriteLine("This is not an image file");
-                }
+                Image img = Image.FromFile(f);  
+                imageList.Images.Add(img); 
             }
             this.listIcon.View = View.LargeIcon;
             this.imageList.ImageSize = new Size(32, 32);
@@ -395,22 +423,18 @@ namespace TongLeThang_ChatMessages
         {
             cbStatusListClient.Items.Add(item.LocalEndPoint.ToString());
         }
-        private void selectAll_Click(object sender, EventArgs e)
-        {
-            listMess.SelectAll();
-            listMess.SelectionBackColor = Color.Yellow;
-        }
-
-        private void menuCopy_Click(object sender, EventArgs e)
-        {
-            if (listMess.SelectionLength > 0)
-                listMess.Copy();
-        }
 
         private void menuDelete_Click(object sender, EventArgs e)
         {
-            if (listMess.SelectionLength > 0)
-                listMess.Cut();
+            DialogResult dr = MessageBox.Show("Bạn có muốn xóa tất cả tin nhắn ", "Thông báo !", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dr == DialogResult.OK)
+            {
+                listMess.ReadOnly = false;
+                listMess.SelectAll();
+                if (listMess.SelectionLength > 0)
+                    listMess.SelectedText = listMess.SelectedText.Replace(listMess.SelectedText, "");
+                listMess.ReadOnly = true;
+            }
         }
     }
 }

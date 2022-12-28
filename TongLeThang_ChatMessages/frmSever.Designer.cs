@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSever));
             this.txtMess = new System.Windows.Forms.RichTextBox();
-            this.imageList = new System.Windows.Forms.ImageList();
-            this.listMess = new System.Windows.Forms.RichTextBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
-            this.menuSelect = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.listIcon = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,7 +42,10 @@
             this.btnImage = new System.Windows.Forms.Button();
             this.cbListClient = new System.Windows.Forms.CheckedListBox();
             this.cbStatusListClient = new System.Windows.Forms.CheckedListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.listMess = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtMess
@@ -61,48 +63,20 @@
             this.imageList.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // listMess
-            // 
-            this.listMess.ContextMenuStrip = this.contextMenuStrip1;
-            this.listMess.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listMess.Location = new System.Drawing.Point(258, 12);
-            this.listMess.Name = "listMess";
-            this.listMess.Size = new System.Drawing.Size(586, 564);
-            this.listMess.TabIndex = 18;
-            this.listMess.Text = "";
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuSelect,
-            this.menuCopy,
             this.menuDelete});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(158, 82);
-            // 
-            // menuSelect
-            // 
-            this.menuSelect.Image = global::ChatSever.Properties.Resources.iconselect;
-            this.menuSelect.Name = "menuSelect";
-            this.menuSelect.Size = new System.Drawing.Size(157, 26);
-            this.menuSelect.Text = "Chọn tất cả";
-            this.menuSelect.Click += new System.EventHandler(this.selectAll_Click);
-            // 
-            // menuCopy
-            // 
-            this.menuCopy.Image = global::ChatSever.Properties.Resources.iconcopy;
-            this.menuCopy.Name = "menuCopy";
-            this.menuCopy.Size = new System.Drawing.Size(157, 26);
-            this.menuCopy.Text = "Sao chép";
-            this.menuCopy.Click += new System.EventHandler(this.menuCopy_Click);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(166, 30);
             // 
             // menuDelete
             // 
-            this.menuDelete.Image = global::ChatSever.Properties.Resources.iconclear;
+            this.menuDelete.Image = ((System.Drawing.Image)(resources.GetObject("menuDelete.Image")));
             this.menuDelete.Name = "menuDelete";
-            this.menuDelete.Size = new System.Drawing.Size(157, 26);
-            this.menuDelete.Text = "Xóa";
+            this.menuDelete.Size = new System.Drawing.Size(165, 26);
+            this.menuDelete.Text = "Xóa tin nhắn";
             this.menuDelete.Click += new System.EventHandler(this.menuDelete_Click);
             // 
             // listIcon
@@ -131,7 +105,7 @@
             // btnSend
             // 
             this.btnSend.BackColor = System.Drawing.Color.LightGray;
-            this.btnSend.BackgroundImage = global::ChatSever.Properties.Resources.iconmess;
+            this.btnSend.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSend.BackgroundImage")));
             this.btnSend.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnSend.Location = new System.Drawing.Point(784, 582);
             this.btnSend.Name = "btnSend";
@@ -142,7 +116,7 @@
             // 
             // btnFile
             // 
-            this.btnFile.BackgroundImage = global::ChatSever.Properties.Resources.iconfile;
+            this.btnFile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnFile.BackgroundImage")));
             this.btnFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnFile.Location = new System.Drawing.Point(195, 587);
             this.btnFile.Name = "btnFile";
@@ -152,7 +126,7 @@
             // 
             // btnIcon
             // 
-            this.btnIcon.BackgroundImage = global::ChatSever.Properties.Resources.icon;
+            this.btnIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnIcon.BackgroundImage")));
             this.btnIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnIcon.Location = new System.Drawing.Point(120, 587);
             this.btnIcon.Name = "btnIcon";
@@ -163,7 +137,7 @@
             // 
             // btnImage
             // 
-            this.btnImage.BackgroundImage = global::ChatSever.Properties.Resources.iconimage;
+            this.btnImage.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnImage.BackgroundImage")));
             this.btnImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnImage.Location = new System.Drawing.Point(29, 587);
             this.btnImage.Name = "btnImage";
@@ -185,11 +159,34 @@
             // cbStatusListClient
             // 
             this.cbStatusListClient.FormattingEnabled = true;
-            this.cbStatusListClient.Location = new System.Drawing.Point(12, 321);
+            this.cbStatusListClient.Location = new System.Drawing.Point(12, 459);
             this.cbStatusListClient.Name = "cbStatusListClient";
-            this.cbStatusListClient.Size = new System.Drawing.Size(120, 89);
+            this.cbStatusListClient.Size = new System.Drawing.Size(201, 123);
             this.cbStatusListClient.TabIndex = 23;
             this.cbStatusListClient.Visible = false;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.listMess);
+            this.panel1.Location = new System.Drawing.Point(256, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(588, 572);
+            this.panel1.TabIndex = 30;
+            // 
+            // listMess
+            // 
+            this.listMess.BackColor = System.Drawing.Color.White;
+            this.listMess.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listMess.ContextMenuStrip = this.contextMenuStrip1;
+            this.listMess.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listMess.Location = new System.Drawing.Point(18, 3);
+            this.listMess.Name = "listMess";
+            this.listMess.ReadOnly = true;
+            this.listMess.Size = new System.Drawing.Size(544, 566);
+            this.listMess.TabIndex = 0;
+            this.listMess.Text = "";
             // 
             // frmSever
             // 
@@ -197,11 +194,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(857, 653);
+            this.Controls.Add(this.listIcon);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.cbStatusListClient);
             this.Controls.Add(this.cbListClient);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.listIcon);
-            this.Controls.Add(this.listMess);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.btnIcon);
             this.Controls.Add(this.btnImage);
@@ -213,6 +210,7 @@
             this.Text = "Sever";
             this.Load += new System.EventHandler(this.frmSever_Load);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,15 +223,14 @@
         private System.Windows.Forms.Button btnIcon;
         private System.Windows.Forms.Button btnFile;
         private System.Windows.Forms.ImageList imageList;
-        private System.Windows.Forms.RichTextBox listMess;
         private System.Windows.Forms.ListView listIcon;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem menuSelect;
-        private System.Windows.Forms.ToolStripMenuItem menuCopy;
         private System.Windows.Forms.ToolStripMenuItem menuDelete;
         private System.Windows.Forms.CheckedListBox cbListClient;
         private System.Windows.Forms.CheckedListBox cbStatusListClient;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RichTextBox listMess;
     }
 }
 

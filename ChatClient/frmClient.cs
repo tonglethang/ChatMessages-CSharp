@@ -14,6 +14,7 @@ using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Drawing.Imaging;
 using TongLeThang_ChatMessages;
+using static System.Net.WebRequestMethods;
 
 namespace ChatClient
 {
@@ -26,7 +27,7 @@ namespace ChatClient
         Image icon;
         string path = "";
         static Random rnd = new Random();
-        int ip = rnd.Next(100);
+        int ip = rnd.Next(243) +1;
         public frmClient()
         {
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -64,36 +65,54 @@ namespace ChatClient
         {
             if (txtMess.Text != String.Empty && path == "" && icon == null)
             {
+                listMess.SelectionAlignment = HorizontalAlignment.Right;
+                listMess.ReadOnly = false;
                 string str = txtMess.Text.ToString();
                 byte[] data = new byte[1024 * 5000];
                 data = EnCode(str);
                 client.Send(data);
-                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + txtMess.Text + "\n");
+                string name = getNameSendTo();
+                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
+                listMess.AppendText(name + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" );
+                listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
+                listMess.AppendText(txtMess.Text + "\n");
                 txtMess.Text = "";
+                listMess.ReadOnly = true;
             }
             else if (icon != null)
             {
+                listMess.SelectionAlignment = HorizontalAlignment.Right;
+                listMess.ReadOnly = false;
                 byte[] data = new byte[1024 * 5000];
                 data = ImageToByteArray(icon);
                 client.Send(data);
-
-                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ ") \n");
+                string name = getNameSendTo();
+                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
+                listMess.AppendText(name + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
                 listMess.Paste();
                 listMess.AppendText("\n");
                 icon = null;
                 txtMess.Text = "";
+                listMess.ReadOnly = true;
             }
             else if (path != "")
             {
+                listMess.SelectionAlignment = HorizontalAlignment.Right;
+                listMess.ReadOnly = false;
                 Image image = Image.FromFile(path);
                 byte[] data = new byte[1024 * 5000];
                 data = ImageToByteArray(image);
                 client.Send(data);
-                listMess.AppendText("Tôi " + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
+                string name = getNameSendTo();
+                listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
+                listMess.AppendText(name + "(" + DateTime.Now.ToString("h:mm:ss tt") + "): \n");
+                listMess.SelectionFont = new Font("Times NewRoman", 14, FontStyle.Bold);
                 listMess.Paste();
                 listMess.AppendText("\n");
                 path = "";
                 txtMess.Text = "";
+                listMess.ReadOnly =true;
             }
             else
             {
@@ -102,6 +121,9 @@ namespace ChatClient
         }
         private void ReceiveMess()
         {
+            string nameClientTmp = "";
+            string name = "Sever ";
+            bool checkNameClient = false;
             try
             {
                 while (true)
@@ -110,19 +132,33 @@ namespace ChatClient
                     client.Receive(data);
                     string[] str1 = DeCode(data).Split(';');
                     string[] strCheck = str1[0].Split('&');
-                    string name = "";
+
+                    if (strCheck.Contains("!NameClient"))
+                    {
+                        nameClientTmp = "Client " + strCheck[1];
+                        checkNameClient = true;
+                        
+                    }
 
                     if (IsValidImage(data))
                     {
+                        if (checkNameClient)
+                        {
+                            name = nameClientTmp;
+                            nameClientTmp = "Sever";
+                        }
+                        listMess.SelectionAlignment = HorizontalAlignment.Left;
+                        listMess.ReadOnly = false;
                         Image image = byteArrayToImage(data);
                         Clipboard.SetDataObject(image, false, 1, 200);
+                        listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
                         listMess.AppendText(name + " "+"(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n");
+                        listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
                         listMess.Paste();
                         listMess.AppendText("\n");
+                        listMess.ReadOnly = true;
                     }
-                    //set name client send message 
 
-                    //
                     else if (strCheck[0].Contains("127.0.0"))
                     {
                         int pos = -1;
@@ -152,16 +188,27 @@ namespace ChatClient
                         }
                         catch
                         {
-                            cbListClient.SetItemChecked(pos -1 , true);
+                            cbListClient.SetItemChecked(pos - 1 , true);
                         }
                     }
-                    else if(!IsValidImage(data))
+                    else if(!IsValidImage(data) && !DeCode(data).Contains("!NameClient"))
                     {
+                        if (checkNameClient)
+                        {
+                            name = nameClientTmp;
+                            nameClientTmp = "Server";
+                        }
                         string str = DeCode(data);
                         if (str != null || str != String.Empty)
                         {
-                            listMess.AppendText(name + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" + str);
+                            listMess.SelectionAlignment = HorizontalAlignment.Left;
+                            listMess.ReadOnly = false;
+                            listMess.SelectionFont = new Font("Times New Roman", 12, FontStyle.Regular);
+                            listMess.AppendText(name + " " + "(" + DateTime.Now.ToString("h:mm:ss tt")+ "): \n" );
+                            listMess.SelectionFont = new Font("Times New Roman", 14, FontStyle.Bold);
+                            listMess.AppendText(str);
                             listMess.AppendText("\n");
+                            listMess.ReadOnly = true;
                         }
                     }
 
@@ -170,10 +217,8 @@ namespace ChatClient
             catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Có lỗi !");
-                listMess.AppendText(ex.ToString());
                 this.Close();
             }
-
         }
         private static byte[] EnCode(string str)
         {
@@ -201,19 +246,22 @@ namespace ChatClient
                 txtMess.Paste();
             }
         }
+        private static String getPathIcon()
+        {
+            string duongDan = Environment.CurrentDirectory.ToString(); // lấy đường dẫn thư mục
+            var url = Directory.GetParent(Directory.GetParent(duongDan).ToString()); // lấy thư mục cha
+
+            return url.ToString();
+
+        }
         private void btnIcon_Click(object sender, EventArgs e)
         {
-            DirectoryInfo dir = new DirectoryInfo(@"D:\Documents\WinForm\TongLeThang_MiniWord\TongLeThang_MiniWord\icon");
-            foreach (FileInfo file in dir.GetFiles())
+            string filePath = getPathIcon() + @"\Icons";
+            string[] files = Directory.GetFiles(filePath);
+            foreach (String f in files)
             {
-                try
-                {
-                    this.imageList.Images.Add(file.Name, Image.FromFile(file.FullName));
-                }
-                catch
-                {
-                    Console.WriteLine("This is not an image file");
-                }
+                Image img = Image.FromFile(f);  // từ cái file đó chuyển qua định dạng ảnh
+                imageList.Images.Add(img); // bỏ vào img list
             }
             this.listIcon.View = View.LargeIcon;
             this.imageList.ImageSize = new Size(32, 32);
@@ -280,24 +328,20 @@ namespace ChatClient
             }
             return true;
         }
-        private void selectAll_Click(object sender, EventArgs e)
-        {
-            listMess.SelectAll();
-            listMess.SelectionBackColor = Color.Yellow;
-        }
-
-        private void menuCopy_Click(object sender, EventArgs e)
-        {
-            if (listMess.SelectionLength > 0)
-                listMess.Copy();
-        }
-
         private void menuDelete_Click(object sender, EventArgs e)
         {
-            if (listMess.SelectionLength > 0)
-                listMess.Cut();
-        }
+            DialogResult dr = MessageBox.Show("Bạn có muốn xóa tất cả tin nhắn ", "Thông báo !", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if(dr == DialogResult.OK)
+            {
+                listMess.ReadOnly = false;
+                listMess.SelectAll();
+                if (listMess.SelectionLength > 0)
 
+                    listMess.SelectedText = listMess.SelectedText.Replace(listMess.SelectedText, "");
+                listMess.ReadOnly = true;
+            }
+
+        }
 
         private void rdClient_CheckedChanged(object sender, EventArgs e)
         {
@@ -305,8 +349,7 @@ namespace ChatClient
             {
                 if (rdClient.Checked)
                 {
-                    lblListClient.Visible = true;
-                    cbListClient.Visible = true;
+
                     byte[] data = new byte[1024 * 5000];
                     cbListClient.SetItemCheckState(0, CheckState.Checked);
                     for (int i = 0; i < cbListClient.Items.Count; i++)
@@ -318,6 +361,8 @@ namespace ChatClient
                             client.Send(data);
                         }
                     }
+                    lblListClient.Visible = true;
+                    cbListClient.Visible = true;
                 }
             }
             catch
@@ -372,6 +417,51 @@ namespace ChatClient
             else
             {
                 return -1;
+            }
+        }
+        private string getNameSendTo()
+        {
+            string str = "";
+            if (rdSever.Checked)
+            {
+                str = "Tôi đến Sever ";
+            }
+            else
+            {
+                for(int i = 0; i < cbListClient.Items.Count; i++)
+                {
+                    if (cbListClient.GetItemChecked(i))
+                    {
+                        str = "Tôi đến " + cbListClient.Items[i].ToString() + " ";
+                    }
+                }
+            }
+            return str;
+        }
+
+        private void btnChuyenTiep_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = MessageBox.Show("Bạn chuyển tiếp tin nhắn !!!", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (dialog == DialogResult.OK)
+            {
+                RichTextBox tmp = new RichTextBox();
+                int firstcharindex = listMess.GetFirstCharIndexOfCurrentLine();
+                int currentline = listMess.GetLineFromCharIndex(firstcharindex);
+                string currentlinetext = listMess.Lines[currentline];
+                listMess.Select(firstcharindex, currentlinetext.Length);
+                tmp.Text = "Bạn đã chuyển tiếp tin nhắn ";
+                tmp.ForeColor = Color.Red;
+                tmp.SelectionAlignment = listMess.SelectionAlignment;
+                listMess.SelectedRtf = tmp.Rtf;
+                txtMess.Text = currentlinetext;
+
+                SendMess();
+
+
+            }
+            if (dialog == DialogResult.Cancel)
+            {
+                return;
             }
         }
     }
